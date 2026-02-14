@@ -4,26 +4,30 @@ const container = document.getElementById("confessionsContainer");
 const toggle = document.getElementById("themeToggle");
 
 /* ================= SUBMIT ================= */
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
+if (form) {
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-  const text = input.value.trim();
-  if (!text) return;
+    const text = input.value.trim();
+    if (!text) return;
 
-  try {
-    const res = await fetch("/api/confessions", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text }),
-    });
+    try {
+      const res = await fetch("/api/confessions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ text }),
+      });
 
-    const data = await res.json();
-    addConfessionToDOM(data);
-    input.value = "";
-  } catch (err) {
-    console.error("Error posting confession:", err);
-  }
-});
+      const data = await res.json();
+      addConfessionToDOM(data);
+      input.value = "";
+    } catch (err) {
+      console.error("Error posting confession:", err);
+    }
+  });
+}
 
 /* ================= LOAD ================= */
 async function loadConfessions() {
@@ -63,7 +67,7 @@ function addConfessionToDOM(confession) {
   likeBtn.addEventListener("click", async () => {
     try {
       const res = await fetch(
-        \`/api/confessions/\${confession._id}/like\`,
+        `/api/confessions/${confession._id}/like`,
         { method: "PUT" }
       );
 
