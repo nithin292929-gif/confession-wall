@@ -49,9 +49,7 @@ function addConfessionToDOM(confession) {
 
   card.innerHTML = `
     <div class="card-header">
-      <span class="time">
-        ${new Date(confession.createdAt).toLocaleString()}
-      </span>
+      <span>${new Date(confession.createdAt).toLocaleString()}</span>
     </div>
 
     <p>${confession.text}</p>
@@ -59,11 +57,17 @@ function addConfessionToDOM(confession) {
     <button class="like-btn">
       ❤️ <span>${confession.likes}</span>
     </button>
+
+    <button class="delete-btn">
+      🗑 Delete
+    </button>
   `;
 
   const likeBtn = card.querySelector(".like-btn");
   const likeCount = likeBtn.querySelector("span");
+  const deleteBtn = card.querySelector(".delete-btn");
 
+  /* ===== LIKE ===== */
   likeBtn.addEventListener("click", async () => {
     try {
       const res = await fetch(
@@ -73,8 +77,25 @@ function addConfessionToDOM(confession) {
 
       const updated = await res.json();
       likeCount.textContent = updated.likes;
+
+      // Pulse animation
+      likeBtn.classList.add("pulse");
+      setTimeout(() => likeBtn.classList.remove("pulse"), 400);
     } catch (err) {
       console.error("Like failed:", err);
+    }
+  });
+
+  /* ===== DELETE ===== */
+  deleteBtn.addEventListener("click", async () => {
+    try {
+      await fetch(`/api/confessions/${confession._id}`, {
+        method: "DELETE",
+      });
+
+      card.remove();
+    } catch (err) {
+      console.error("Delete failed:", err);
     }
   });
 
