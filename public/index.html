@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🔥 Anonymous Confession Wall</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div class="container">
+    
+    <h1>🔥 Anonymous Confession Wall</h1>
+    <p class="subtitle">Say it. No one knows it's you.</p>
+
+    <div class="input-section">
+      <textarea 
+        id="confessionInput" 
+        placeholder="Write your confession here..."
+        maxlength="200"
+      ></textarea>
+
+      <div class="controls">
+        <span id="charCount">0 / 200</span>
+        <button onclick="addConfession()">Post Confession</button>
+      </div>
+    </div>
+
+    <div id="confessions"></div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
