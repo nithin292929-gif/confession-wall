@@ -1,62 +1,82 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const path = require("path");
 const cors = require("cors");
-const http = require("http");
-const { Server } = require("socket.io");
 
 const app = express();
+
+// Middleware
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB Connected"))
-  .catch(err => console.log(err));
+// Serve static frontend files
+app.use(express.static(path.join(__dirname, "public")));
 
+// ============================
+// MongoDB Connection
+// ============================
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => console.log("MongoDB Connected"))
+.catch(err => console.log(err));
+
+// ============================
+// Confession Schema
+// ============================
 const confessionSchema = new mongoose.Schema({
-  text: String,
-  createdAt: { type: Date, default: Date.now }
+  text: {
+    type: String,
+    required: true,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 const Confession = mongoose.model("Confession", confessionSchema);
 
-// 👇 IMPORTANT: create http server
-const server = http.createServer(app);
+// ============================
+// Routes
+// ============================
 
-// 👇 Attach socket to server
-const io = new Server(server, {
-  cors: {
-    origin: "*"
-  }
-});
-
-// Socket connection
-io.on("connection", (socket) => {
-  console.log("User connected");
+// Home route
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 // Get all confessions
-app.get("/confessions", async (req, res) => {
-  const confessions = await Confession.find().sort({ createdAt: -1 });
-  res.json(confessions);
+app.get("/api/confessions", async (req, res) => {
+  try {
+    const confessions = await Confession.find().sort({ createdAt: -1 });
+    res.json(confessions);
+  } catch (error) {
+    res.status(500).json({ error: "Server Error" });
+  }
 });
 
-// Post confession
-app.post("/confessions", async (req, res) => {
-  const newConfession = new Confession({
-    text: req.body.text
-  });
+// Add new confession
+app.post("/api/confessions", async (req, res) => {
+  try {
+    const newConfession = new Confession({
+      text: req.body.text,
+    });
 
-  await newConfession.save();
-
-  // 🔥 THIS MAKES REALTIME WORK
-  io.emit("newConfession", newConfession);
-
-  res.json(newConfession);
+    await newConfession.save();
+    res.status(201).json(newConfession);
+  } catch (error) {
+    res.status(400).json({ error: "Failed to save confession" });
+  }
 });
 
+// ============================
+// Server
+// ============================
 const PORT = process.env.PORT || 5000;
 
-// ⚠️ IMPORTANT: use server.listen NOT app.listen
-server.listen(PORT, () => {
+app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
