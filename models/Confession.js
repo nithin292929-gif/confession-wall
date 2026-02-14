@@ -11,7 +11,7 @@ const confessionSchema = new mongoose.Schema(
       default: 0,
     },
   },
-  { timestamps: true } // IMPORTANT for createdAt
+  { timestamps: true }
 );
 
 module.exports = mongoose.model("Confession", confessionSchema);
