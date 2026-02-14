@@ -1,127 +1,178 @@
-body {
+@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap");
+
+* {
   margin: 0;
-  font-family: 'Orbitron', sans-serif;
-  background: linear-gradient(-45deg, #0f0f1a, #1a0033, #000428, #1f005c);
-  background-size: 400% 400%;
-  animation: gradientBG 12s ease infinite;
-  color: white;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Orbitron", sans-serif;
+}
+
+body {
+  background: radial-gradient(circle at top, #1a002b, #000814);
+  color: #00f7ff;
   min-height: 100vh;
+  padding: 40px 20px;
+  overflow-x: hidden;
+  position: relative;
 }
 
-/* Background Animation */
-@keyframes gradientBG {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+/* ===== Animated Neon Glow Background ===== */
+
+body::before {
+  content: "";
+  position: fixed;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(#ff00ff33 1px, transparent 1px),
+              radial-gradient(#00f7ff33 1px, transparent 1px);
+  background-size: 60px 60px;
+  animation: moveBg 20s linear infinite;
+  z-index: -1;
 }
 
-/* Title Glow + Glitch */
+@keyframes moveBg {
+  from { transform: translate(0,0); }
+  to { transform: translate(-200px,-200px); }
+}
+
+/* ===== Title ===== */
+
 h1 {
   text-align: center;
-  font-size: 2.8rem;
-  margin-top: 30px;
-  color: #00f7ff;
-  text-shadow:
-    0 0 5px #00f7ff,
-    0 0 15px #00f7ff,
-    0 0 30px #00f7ff;
-  animation: flicker 2s infinite alternate;
+  font-size: 32px;
+  margin-bottom: 30px;
+  color: #ff00ff;
+  text-shadow: 0 0 15px #ff00ff, 0 0 40px #ff00ff;
 }
 
-@keyframes flicker {
-  from { opacity: 1; }
-  to { opacity: 0.85; }
-}
+/* ===== Container ===== */
 
 .container {
-  max-width: 700px;
+  max-width: 750px;
   margin: auto;
-  padding: 20px;
 }
 
-/* Form */
+/* ===== Form ===== */
+
 form {
   display: flex;
   gap: 10px;
-  margin-bottom: 25px;
+  margin-bottom: 30px;
 }
 
-input {
+textarea {
   flex: 1;
   padding: 12px;
-  background: #111;
-  border: 2px solid #00f7ff;
-  color: white;
-  border-radius: 8px;
+  background: #111122;
+  border: 1px solid #00f7ff;
+  border-radius: 10px;
+  color: #00f7ff;
+  resize: none;
   outline: none;
-  transition: 0.3s;
+  font-size: 14px;
+  box-shadow: 0 0 10px #00f7ff44;
 }
 
-input:focus {
-  box-shadow: 0 0 15px #00f7ff;
-}
-
-/* Neon Button */
-button {
+form button {
   padding: 12px 18px;
-  background: #ff0080;
+  background: #ff00ff;
   border: none;
-  border-radius: 8px;
-  color: white;
+  border-radius: 10px;
   cursor: pointer;
+  color: black;
+  font-weight: bold;
+  transition: 0.3s;
+  box-shadow: 0 0 15px #ff00ff;
+}
+
+form button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 30px #ff00ff;
+}
+
+/* ===== Card ===== */
+
+.confession-card {
+  background: #111122;
+  border: 1px solid #00f7ff;
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 20px;
+  box-shadow: 0 0 15px #00f7ff55;
+  transition: 0.3s;
+  position: relative;
+}
+
+.confession-card:hover {
+  box-shadow: 0 0 30px #00f7ff;
+  transform: translateY(-5px);
+}
+
+.card-header {
+  font-size: 12px;
+  color: #ff00ff;
+  margin-bottom: 10px;
+}
+
+/* ===== Buttons ===== */
+
+.like-btn,
+.delete-btn {
+  padding: 8px 14px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-right: 10px;
   transition: 0.3s;
 }
 
-button:hover {
-  box-shadow:
-    0 0 10px #ff0080,
-    0 0 20px #ff0080,
-    0 0 40px #ff0080;
-  transform: scale(1.05);
-}
-
-/* Cards */
-.card {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  padding: 15px;
-  border-radius: 12px;
-  margin-bottom: 18px;
-  border: 1px solid #8a2be2;
-  transition: 0.3s ease;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow:
-    0 0 10px #8a2be2,
-    0 0 20px #8a2be2,
-    0 0 40px #8a2be2;
-}
-
-/* Action Buttons */
-.actions {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 12px;
-}
-
+/* Like */
 .like-btn {
-  background: #8a2be2;
+  border: 1px solid #ff00ff;
+  color: #ff00ff;
+  background: transparent;
 }
 
 .like-btn:hover {
-  box-shadow:
-    0 0 10px #00f7ff,
-    0 0 20px #00f7ff;
+  background: #ff00ff;
+  color: black;
 }
 
+/* Heart Pulse Animation */
+.like-btn.pulse {
+  animation: pulse 0.4s ease;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.4); }
+  100% { transform: scale(1); }
+}
+
+/* Delete */
 .delete-btn {
-  background: #ff0033;
+  border: 1px solid #ff0000;
+  color: #ff0000;
+  background: transparent;
 }
 
 .delete-btn:hover {
-  box-shadow:
-    0 0 10px #ff0033,
-    0 0 20px #ff0033;
+  background: #ff0000;
+  color: black;
+}
+
+/* ===== Theme Toggle ===== */
+
+#themeToggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: 1px solid #00f7ff;
+  background: #111122;
+  color: #00f7ff;
+  cursor: pointer;
+  box-shadow: 0 0 15px #00f7ff;
 }
