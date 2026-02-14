@@ -3,30 +3,38 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Confession Wall</title>
-
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <title>Anonymous Confession Wall</title>
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
 
-  <!-- DARK MODE TOGGLE -->
-  <button id="themeToggle" class="theme-toggle">🌙</button>
-
-  <div id="tsparticles"></div>
+  <!-- Theme Toggle -->
+  <button id="themeToggle">🌙</button>
 
   <div class="container">
-    <h1 class="title">🔥 Confession Wall</h1>
+    <h1>⚡ Anonymous Confession Wall ⚡</h1>
 
+    <!-- Confession Form -->
     <form id="confessionForm">
-      <textarea id="confessionInput" placeholder="Write your confession..." required></textarea>
-      <button type="submit">Post Confession</button>
+      <textarea
+        id="confessionInput"
+        rows="2"
+        placeholder="Drop your secret..."
+        required
+      ></textarea>
+
+      <button type="submit">Post</button>
     </form>
 
+    <!-- Confessions List -->
     <div id="confessionsContainer"></div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
+  <!-- Socket.IO (REQUIRED FOR REALTIME) -->
+  <script src="/socket.io/socket.io.js"></script>
+
+  <!-- Main Script -->
   <script src="script.js"></script>
 
 </body>
