@@ -10,6 +10,12 @@ const confessionSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    avatar: {
+      type: String,
+    },
+    reply: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

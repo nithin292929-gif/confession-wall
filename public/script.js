@@ -1,8 +1,9 @@
+
 const form = document.getElementById("confessionForm");
 const input = document.getElementById("confessionInput");
 const container = document.getElementById("confessionsContainer");
 
-/* Submit confession */
+/* Submit */
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -20,7 +21,7 @@ form.addEventListener("submit", async (e) => {
   input.value = "";
 });
 
-/* Load all confessions */
+/* Load */
 async function loadConfessions() {
   const res = await fetch("/api/confessions");
   const data = await res.json();
@@ -29,13 +30,23 @@ async function loadConfessions() {
   data.forEach(addConfessionToDOM);
 }
 
-/* Add confession to UI */
+/* Render Card */
 function addConfessionToDOM(confession) {
   const card = document.createElement("div");
   card.className = "confession-card";
 
   card.innerHTML = `
+    <div class="card-header">
+      <span class="avatar">${confession.avatar}</span>
+      <span class="time">${new Date(confession.createdAt).toLocaleString()}</span>
+    </div>
+
     <p>${confession.text}</p>
+
+    <div class="ai-reply">
+      🤖 ${confession.reply}
+    </div>
+
     <button class="like-btn">
       ❤️ <span>${confession.likes}</span>
     </button>
@@ -56,19 +67,16 @@ function addConfessionToDOM(confession) {
   container.appendChild(card);
 }
 
-/* Load on start */
 loadConfessions();
+/* DARK / LIGHT MODE */
+const toggle = document.getElementById("themeToggle");
 
-/* PARTICLES */
-tsParticles.load("tsparticles", {
-  particles: {
-    number: { value: 60 },
-    size: { value: 2 },
-    move: { speed: 1 },
-    links: {
-      enable: true,
-      distance: 150,
-      color: "#00ffff",
-    },
-  },
+toggle.addEventListener("click", () => {
+  document.body.classList.toggle("light-mode");
+
+  if (document.body.classList.contains("light-mode")) {
+    toggle.textContent = "☀️";
+  } else {
+    toggle.textContent = "🌙";
+  }
 });
